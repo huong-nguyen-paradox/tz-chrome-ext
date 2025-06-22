@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Selected Text</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+        <style>
+            /* Apply the Inter font and basic styling */
+            body {
+                font-family: "Inter", sans-serif;
+                width: 300px; /* fixed width for popup */
+                padding: 20px; /* space b/t popup edge and content? */
+                text-align: center;
+                background-color: #f0f4f8;
+                border-radius: 10px; /* rounded corners for popup */
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+                color: #333; /* font color */
+                display: flex; /* make container flexible, able configure childred in axis */
+                flex-direction: column; /* align children vertically */
+                gap: 15px; /* space bt children? */
+                align-items: center;
+                min-height: 100px; 
+            }
+            h2 {
+                color: #2c3e50; /* text color for header */
+                margin: 0; /* remove default margin */
+                font-size: 1.4em;
+            }
+            #selectedTextDisplay {
+                min-height: 50px; /* Ensure space for text */
+                padding: 10px 15px;
+                background-color: #ffffff;
+                border: 1px solid #dcdfe6;
+                border-radius: 8px;
+                width: 100%;
+                box-sizing: border-box; /* Include padding in width */
+                text-align: left;
+                word-wrap: break-word; /* Ensure long words break */
+                font-size: 1em;
+                color: #555;
+                overflow-y: auto; /* Enable scrolling for long text */
+                max-height: 150px; /* Limit height for scrollable area */
+            }
+            #loadingMessage {
+                font-style: italic;
+                color: #888;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Selected Text:</h2>
+        <p id="loadingMessage">Loading selected text...</p>
+        <div id="selectedTextDisplay"></div>
+
+        <!-- link to JavaScript file - the 'defer' attr ensures the HTML is parsed before the script runs. -->
+        <script src="popup.js" defer></script>
+    </body>
+</html>

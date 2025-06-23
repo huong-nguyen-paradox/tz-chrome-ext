@@ -22,8 +22,11 @@
         "activeTab",
         "scripting"
     ],
-    "host_permissions": [
-        "<all_urls>"
+    "web_accessible_resources": [
+        {
+            "resources": ["tailwind.css"],
+            "matches": ["<all_urls>"]
+        }
     ]
 }
 

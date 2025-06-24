@@ -32,7 +32,6 @@ function createOrUpdateTimeConverterOverlay() {
     const OVERLAY_ID = 'extension-timezone-converter-overlay';
     const TIME_INPUT_ID = OVERLAY_ID + '-time-input';
     const SOURCE_TZ_SELECT_ID = OVERLAY_ID + '-source-tz-select';
-    const TARGET_TZ_SELECT_ID = OVERLAY_ID + '-target-tz-select'; // New ID for target timezone select
     const CONVERT_BUTTON_ID = OVERLAY_ID + '-convert-btn';
     const RESULTS_AREA_ID = OVERLAY_ID + '-results';
     const CLOSE_BUTTON_ID = OVERLAY_ID + '-close-btn';
@@ -89,6 +88,7 @@ function createOrUpdateTimeConverterOverlay() {
             flex-direction: column;
             gap: 15px;
             box-sizing: border-box; /* Include padding in width */
+            position: relative; /* For absolute positioning of close button */
         `;
 
         // Basic styling for inputs and buttons (no animations/transitions here either)
@@ -233,35 +233,8 @@ function createOrUpdateTimeConverterOverlay() {
             console.warn("Could not determine local timezone:", e);
             sourceTzSelect.value = "UTC"; // Default to UTC if detection fails
         }
+
         inputSection.appendChild(sourceTzSelect);
-
-        // --- NEW: Target Timezone Select ---
-        const targetTzLabel = document.createElement('label');
-        targetTzLabel.textContent = 'To Timezone:';
-        targetTzLabel.htmlFor = TARGET_TZ_SELECT_ID;
-        targetTzLabel.style.cssText = `
-            font-size: 0.9em;
-            color: #555;
-            display: block;
-            margin-bottom: 4px;
-            margin-top: 10px; /* Space above this label */
-        `;
-        inputSection.appendChild(targetTzLabel);
-
-        const targetTzSelect = document.createElement('select');
-        targetTzSelect.id = TARGET_TZ_SELECT_ID;
-        timezones.forEach(tz => {
-            const option = document.createElement('option');
-            option.value = tz;
-            option.textContent = tz;
-            targetTzSelect.appendChild(option);
-        });
-        // You might want to default the target timezone to a common one or a different one than source
-        // For now, let's default it to New York as an example.
-        targetTzSelect.value = "America/New_York"; // Default target timezone
-        inputSection.appendChild(targetTzSelect);
-        // --- END NEW ---
-
         overlay.appendChild(inputSection);
 
         // Convert Button
@@ -298,7 +271,6 @@ function createOrUpdateTimeConverterOverlay() {
         convertButton.addEventListener('click', () => {
             const inputTime = timeInput.value.trim();
             const sourceTz = sourceTzSelect.value;
-            const targetTz = targetTzSelect.value; // Get the selected target timezone
             const resultsDiv = document.getElementById(RESULTS_AREA_ID);
 
             if (!inputTime) {
@@ -306,31 +278,11 @@ function createOrUpdateTimeConverterOverlay() {
                 return;
             }
 
-            if (sourceTz === targetTz) {
-                resultsDiv.innerHTML = '<span style="color: #ffc107; font-weight: bold;">Source and target timezones are the same. No conversion needed.</span>';
-                return;
-            }
-
             resultsDiv.innerHTML = '<span style="color: #007bff;">Converting...<br></span>'; // Blue for converting message
 
             try {
                 // Determine a base date for parsing (today)
-                // IMPORTANT: To correctly parse the input time in the *source* timezone,
-                // we need to create a `Date` object that inherently understands that timezone.
-                // The `Intl.DateTimeFormat` doesn't help with parsing, only formatting.
-                // A common way to handle this without a full date library is to:
-                // 1. Create a `Date` object from the current date.
-                // 2. Set the hours/minutes based on the input.
-                // 3. Then, when formatting for the *target* timezone, `Intl.DateTimeFormat` handles the conversion.
-
-                // Let's create a date string that `new Date()` can potentially parse with the timezone.
-                // However, `new Date("YYYY-MM-DD HH:MM:SS TZ_NAME")` is not reliably parsed across all browsers.
-                // The most reliable way for cross-timezone parsing with native Date objects
-                // is to parse it as if it were UTC, then adjust, or use a robust library like Luxon/Moment.
-                // For simplicity and given your current approach, we'll continue with parsing local time
-                // and then rely on Intl.DateTimeFormat for *displaying* in the target timezone.
-
-                let parsedDate = new Date(); // Start with current date/time in local timezone
+                let tempDate = new Date(); // Represents current local date and time
 
                 const timeRegex = /(\d{1,2}):(\d{2})\s*(AM|PM)?/i;
                 const match = inputTime.match(timeRegex);
@@ -355,47 +307,40 @@ function createOrUpdateTimeConverterOverlay() {
                     return;
                 }
 
-                // Here's the trick: We create a date string for the *source* timezone.
-                // This is still tricky with `Date` object directly for parsing,
-                // but `Intl.DateTimeFormat` handles the conversion *from* a given Date object.
-                // The native `Date` object always works with the system's local time and UTC internally.
-                // What we need is to interpret `inputTime` *as if it were in `sourceTz`* and then convert.
+                tempDate.setHours(hours, minutes, 0, 0); // Set time on today's date (local timezone)
 
-                // A reliable way to get a Date object representing the input time in the source timezone:
-                // 1. Get current date components in the *local* timezone.
-                // 2. Create a `Date` object from these local components, but with the input time.
-                // 3. Use `toLocaleString` with the `sourceTz` to get its representation in that timezone.
-                // This is less about 'parsing' a date string *into* a specific timezone directly with `new Date()`,
-                // and more about calculating the UTC equivalent of the given time in the source timezone.
+                let output = `<b style="color: #333;">Input Time (${sourceTz}): ${inputTime}</b><br><br><b style="color: #333;">Converted Times:</b><br>`;
 
-                // Let's construct a date object representing the input time *on today's date in the source timezone*.
-                // This requires a bit of a workaround since `new Date()` parses based on the local system.
-                // We'll create a Date object in UTC, then set its components.
-                // Then, we'll format it with the source timezone to make sure it's understood.
+                // Sort timezones by their current offset for a more logical display
+                const sortedTimezones = timezones.slice().sort((a, b) => {
+                    // This uses a simple way to get an offset string for sorting; not a true numeric offset.
+                    // For robust offset comparison, a library would be better.
+                    const offsetA = new Date().toLocaleString('en', { timeZone: a, timeZoneName: 'shortOffset' }).match(/GMT([+-]\d+)/)?.[1] || 0;
+                    const offsetB = new Date().toLocaleString('en', { timeZone: b, timeZoneName: 'shortOffset' }).match(/GMT([+-]\d+)/)?.[1] || 0;
+                    return parseInt(offsetA) - parseInt(offsetB);
+                });
 
-                // First, create a Date object representing "today" in the local system's time.
-                const today = new Date();
-                // Set the hours and minutes for this Date object.
-                today.setHours(hours, minutes, 0, 0);
+                sortedTimezones.forEach(targetTz => {
+                    if (targetTz === sourceTz) {
+                         return; // Don't show conversion if target is same as source
+                    }
 
-                // Now, `today` is a Date object representing `inputTime` on the current date in the *local* timezone.
-                // To get the equivalent time in the *target* timezone, we just use `Intl.DateTimeFormat`.
+                    const options = {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true, // Use 12-hour format with AM/PM
+                        timeZoneName: 'short', // e.g., "EDT", "PST"
+                        timeZone: targetTz
+                    };
+                    const formatter = new Intl.DateTimeFormat('en-US', options);
 
-                const outputOptions = {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true,
-                    timeZoneName: 'short'
-                };
-
-                // Format the input time in its source timezone for display
-                const sourceTimeFormatted = new Intl.DateTimeFormat('en-US', { ...outputOptions, timeZone: sourceTz }).format(today);
-
-                // Format the input time for the target timezone
-                const targetTimeFormatted = new Intl.DateTimeFormat('en-US', { ...outputOptions, timeZone: targetTz }).format(today);
-
-                let output = `<span style="font-weight: 600; color: #007bff;">${targetTz}:</span> ${targetTimeFormatted}`;
+                    // Format the *same* `tempDate` object using the `targetTz`
+                    const convertedTime = formatter.format(tempDate);
+                    output += `<span style="display: block; padding-top: 2px; padding-bottom: 2px;">
+                                 <span style="font-weight: 600; color: #007bff;">${targetTz}:</span> ${convertedTime}
+                               </span>`;
+                });
 
                 resultsDiv.innerHTML = output;
 

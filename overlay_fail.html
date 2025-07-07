@@ -1,0 +1,277 @@
+<div id="extension-timezone-converter-overlay"
+    style="top: 20px; right: 20px; width: 350px; max-width: 95vw; background-color: rgb(255, 255, 255); border: 1px solid rgb(224, 224, 224); border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 25px; padding: 20px; z-index: 2147483647; font-family: Inter, sans-serif; color: rgb(51, 51, 51); display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; position: relative;">
+    <h3 style="margin: 0px 0px 10px; color: rgb(74, 85, 104); font-size: 1.3em; text-align: left; padding-right: 30px;">
+        Timezone Converter</h3><button id="extension-timezone-converter-overlay-close-btn"
+        style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.2em; cursor: pointer; color: rgb(136, 136, 136); padding: 5px; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">X</button>
+    <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;"><label
+            for="extension-timezone-converter-overlay-time-input"
+            style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px;">Time:</label><input
+            type="text" id="extension-timezone-converter-overlay-time-input" placeholder="e.g., 9:00 AM or 14:30"><label
+            for="extension-timezone-converter-overlay-source-tz-select"
+            style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px; margin-top: 10px;">From
+            Timezone:</label><select id="extension-timezone-converter-overlay-source-tz-select">
+            <option value="America/New_York">America/New_York</option>
+            <option value="America/Chicago">America/Chicago</option>
+            <option value="America/Los_Angeles">America/Los_Angeles</option>
+            <option value="Europe/London">Europe/London</option>
+            <option value="Europe/Berlin">Europe/Berlin</option>
+            <option value="Asia/Tokyo">Asia/Tokyo</option>
+            <option value="Asia/Shanghai">Asia/Shanghai</option>
+            <option value="Australia/Sydney">Australia/Sydney</option>
+            <option value="UTC">UTC</option>
+            <option value="Asia/Kolkata">Asia/Kolkata</option>
+            <option value="Asia/Dubai">Asia/Dubai</option>
+            <option value="Europe/Paris">Europe/Paris</option>
+            <option value="Canada/Atlantic">Canada/Atlantic</option>
+            <option value="Mexico/BajaNorte">Mexico/BajaNorte</option>
+        </select></div><button id="extension-timezone-converter-overlay-convert-btn">Convert Time</button>
+    <div id="extension-timezone-converter-overlay-results"
+        style="background-color: rgb(248, 248, 248); border: 1px solid rgb(238, 238, 238); padding: 15px; border-radius: 8px; min-height: 80px; max-height: 250px; overflow-y: auto; text-align: left; overflow-wrap: break-word; font-size: 0.95em; line-height: 1.6; color: rgb(85, 85, 85); flex-grow: 1;">
+        <span style="color: #6c757d;">Enter time and click Convert.</span></div>
+</div>
+
+style="
+top: 20px; 
+right: 20px; 
+width: 350px; 
+max-width: 95vw; 
+background-color: rgb(255, 255, 255); 
+border: 1px solid rgb(224, 224, 224); 
+border-radius: 12px; 
+box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 25px; 
+padding: 20px; 
+z-index: 2147483647; 
+font-family: Inter, sans-serif; 
+color: rgb(51, 51, 51); display: flex; 
+flex-direction: column; 
+gap: 15px; 
+box-sizing: border-box; 
+position: relative;">
+
+
+
+
+top: 20px; right: 20px; width: 350px; max-width: 95vw; background-color: rgb(255, 255, 255); border: 1px solid rgb(224, 224, 224); border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 25px; padding: 20px; z-index: 2147483647; font-family: Inter, sans-serif; color: rgb(51, 51, 51); animation: 0.3s ease-out 0s 1 normal forwards running fadeIn; display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; position: relative;
+
+
+
+
+
+
+
+
+    // with target timezone
+    <div id="extension-timezone-converter-overlay" style="top: 20px; right: 20px; width: 350px; max-width: 95vw; background-color: rgb(255, 255, 255); border: 1px solid rgb(224, 224, 224); border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 25px; padding: 20px; z-index: 2147483647; font-family: Inter, sans-serif; color: rgb(51, 51, 51); display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; position: relative;"><h3 style="margin: 0px 0px 10px; color: rgb(74, 85, 104); font-size: 1.3em; text-align: left; padding-right: 30px;">Timezone Converter</h3><button id="extension-timezone-converter-overlay-close-btn" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.2em; cursor: pointer; color: rgb(136, 136, 136); padding: 5px; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">X</button><div style="display: flex; flex-direction: column; gap: 10px; width: 100%;"><label for="extension-timezone-converter-overlay-time-input" style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px;">Time:</label><input type="text" id="extension-timezone-converter-overlay-time-input" placeholder="e.g., 9:00 AM or 14:30"><label for="extension-timezone-converter-overlay-source-tz-select" style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px; margin-top: 10px;">From Timezone:</label><select id="extension-timezone-converter-overlay-source-tz-select"><option value="America/New_York">America/New_York</option><option value="America/Chicago">America/Chicago</option><option value="America/Los_Angeles">America/Los_Angeles</option><option value="Europe/London">Europe/London</option><option value="Europe/Berlin">Europe/Berlin</option><option value="Asia/Tokyo">Asia/Tokyo</option><option value="Asia/Shanghai">Asia/Shanghai</option><option value="Australia/Sydney">Australia/Sydney</option><option value="UTC">UTC</option><option value="Asia/Kolkata">Asia/Kolkata</option><option value="Asia/Dubai">Asia/Dubai</option><option value="Europe/Paris">Europe/Paris</option><option value="Canada/Atlantic">Canada/Atlantic</option><option value="Mexico/BajaNorte">Mexico/BajaNorte</option></select><label for="extension-timezone-converter-overlay-target-tz-select" style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px; margin-top: 10px;">To Timezone:</label><select id="extension-timezone-converter-overlay-target-tz-select"><option value="America/New_York">America/New_York</option><option value="America/Chicago">America/Chicago</option><option value="America/Los_Angeles">America/Los_Angeles</option><option value="Europe/London">Europe/London</option><option value="Europe/Berlin">Europe/Berlin</option><option value="Asia/Tokyo">Asia/Tokyo</option><option value="Asia/Shanghai">Asia/Shanghai</option><option value="Australia/Sydney">Australia/Sydney</option><option value="UTC">UTC</option><option value="Asia/Kolkata">Asia/Kolkata</option><option value="Asia/Dubai">Asia/Dubai</option><option value="Europe/Paris">Europe/Paris</option><option value="Canada/Atlantic">Canada/Atlantic</option><option value="Mexico/BajaNorte">Mexico/BajaNorte</option></select></div><button id="extension-timezone-converter-overlay-convert-btn">Convert Time</button><div id="extension-timezone-converter-overlay-results" style="background-color: rgb(248, 248, 248); border: 1px solid rgb(238, 238, 238); padding: 15px; border-radius: 8px; min-height: 80px; max-height: 250px; overflow-y: auto; text-align: left; overflow-wrap: break-word; font-size: 0.95em; line-height: 1.6; color: rgb(85, 85, 85); flex-grow: 1;"><span style="color: #6c757d;">Enter time and click Convert.</span></div></div>above
+
+
+
+
+// w/ content.js
+<div id="extension-timezone-converter-overlay"
+    style="top: 20px; right: 20px; width: 350px; max-width: 95vw; background-color: rgb(255, 255, 255); border: 1px solid rgb(224, 224, 224); border-radius: 12px; box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 25px; padding: 20px; z-index: 2147483647; font-family: Inter, sans-serif; color: rgb(51, 51, 51); display: flex; flex-direction: column; gap: 15px; box-sizing: border-box; position: relative;">
+    <h3 style="margin: 0px 0px 10px; color: rgb(74, 85, 104); font-size: 1.3em; text-align: left; padding-right: 30px;">
+        Timezone Converter</h3><button id="extension-timezone-converter-overlay-close-btn"
+        style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.2em; cursor: pointer; color: rgb(136, 136, 136); padding: 5px; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">X</button>
+    <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;"><label
+            for="extension-timezone-converter-overlay-time-input"
+            style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px;">Time:</label><input
+            type="text" id="extension-timezone-converter-overlay-time-input" placeholder="e.g., 9:00 AM or 14:30"><label
+            for="extension-timezone-converter-overlay-source-tz-input"
+            style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px; margin-top: 10px;">From
+            Timezone:</label><input type="text" id="extension-timezone-converter-overlay-source-tz-input"
+            list="extension-timezone-converter-overlay-source-tz-datalist"
+            placeholder="Type to search timezone..."><datalist
+            id="extension-timezone-converter-overlay-source-tz-datalist">
+            <option value="UTC (UTC)" data-iana="UTC"></option>
+            <option value="Africa/Cairo (GMT+3)" data-iana="Africa/Cairo"></option>
+            <option value="Africa/Johannesburg (GMT+2)" data-iana="Africa/Johannesburg"></option>
+            <option value="Africa/Lagos (GMT+1)" data-iana="Africa/Lagos"></option>
+            <option value="Africa/Nairobi (GMT+3)" data-iana="Africa/Nairobi"></option>
+            <option value="America/Adak (HADT)" data-iana="America/Adak"></option>
+            <option value="America/Anchorage (AKDT)" data-iana="America/Anchorage"></option>
+            <option value="America/Argentina/Buenos_Aires (GMT-3)" data-iana="America/Argentina/Buenos_Aires"></option>
+            <option value="America/Bogota (GMT-5)" data-iana="America/Bogota"></option>
+            <option value="America/Boise (MDT)" data-iana="America/Boise"></option>
+            <option value="America/Chicago (CDT)" data-iana="America/Chicago"></option>
+            <option value="America/Denver (MDT)" data-iana="America/Denver"></option>
+            <option value="America/Detroit (EDT)" data-iana="America/Detroit"></option>
+            <option value="America/Halifax (ADT)" data-iana="America/Halifax"></option>
+            <option value="America/Honolulu" data-iana="America/Honolulu"></option>
+            <option value="America/Indiana/Indianapolis (EDT)" data-iana="America/Indiana/Indianapolis"></option>
+            <option value="America/Juneau (AKDT)" data-iana="America/Juneau"></option>
+            <option value="America/Kentucky/Louisville (EDT)" data-iana="America/Kentucky/Louisville"></option>
+            <option value="America/Lima (GMT-5)" data-iana="America/Lima"></option>
+            <option value="America/Los_Angeles (PDT)" data-iana="America/Los_Angeles"></option>
+            <option value="America/Metlakatla (AKDT)" data-iana="America/Metlakatla"></option>
+            <option value="America/Mexico_City (CST)" data-iana="America/Mexico_City"></option>
+            <option value="America/New_York (EDT)" data-iana="America/New_York"></option>
+            <option value="America/Nome (AKDT)" data-iana="America/Nome"></option>
+            <option value="America/North_Dakota/Center (CDT)" data-iana="America/North_Dakota/Center"></option>
+            <option value="America/Phoenix (MST)" data-iana="America/Phoenix"></option>
+            <option value="America/Puerto_Rico (AST)" data-iana="America/Puerto_Rico"></option>
+            <option value="America/Santiago (GMT-4)" data-iana="America/Santiago"></option>
+            <option value="America/Sao_Paulo (GMT-3)" data-iana="America/Sao_Paulo"></option>
+            <option value="America/Sitka (AKDT)" data-iana="America/Sitka"></option>
+            <option value="America/St_Johns (GMT-2:30)" data-iana="America/St_Johns"></option>
+            <option value="America/Vancouver (PDT)" data-iana="America/Vancouver"></option>
+            <option value="America/Yakutat (AKDT)" data-iana="America/Yakutat"></option>
+            <option value="Asia/Bangkok (GMT+7)" data-iana="Asia/Bangkok"></option>
+            <option value="Asia/Dubai (GMT+4)" data-iana="Asia/Dubai"></option>
+            <option value="Asia/Ho_Chi_Minh (GMT+7)" data-iana="Asia/Ho_Chi_Minh"></option>
+            <option value="Asia/Hong_Kong (GMT+8)" data-iana="Asia/Hong_Kong"></option>
+            <option value="Asia/Jakarta (GMT+7)" data-iana="Asia/Jakarta"></option>
+            <option value="Asia/Jerusalem (GMT+3)" data-iana="Asia/Jerusalem"></option>
+            <option value="Asia/Kolkata (GMT+5:30)" data-iana="Asia/Kolkata"></option>
+            <option value="Asia/Riyadh (GMT+3)" data-iana="Asia/Riyadh"></option>
+            <option value="Asia/Seoul (GMT+9)" data-iana="Asia/Seoul"></option>
+            <option value="Asia/Shanghai (GMT+8)" data-iana="Asia/Shanghai"></option>
+            <option value="Asia/Singapore (GMT+8)" data-iana="Asia/Singapore"></option>
+            <option value="Asia/Tokyo (GMT+9)" data-iana="Asia/Tokyo"></option>
+            <option value="Australia/Brisbane (GMT+10)" data-iana="Australia/Brisbane"></option>
+            <option value="Australia/Darwin (GMT+9:30)" data-iana="Australia/Darwin"></option>
+            <option value="Australia/Melbourne (GMT+10)" data-iana="Australia/Melbourne"></option>
+            <option value="Australia/Perth (GMT+8)" data-iana="Australia/Perth"></option>
+            <option value="Australia/Sydney (GMT+10)" data-iana="Australia/Sydney"></option>
+            <option value="Etc/GMT+1 (GMT-1)" data-iana="Etc/GMT+1"></option>
+            <option value="Etc/GMT+10 (GMT-10)" data-iana="Etc/GMT+10"></option>
+            <option value="Etc/GMT+11 (GMT-11)" data-iana="Etc/GMT+11"></option>
+            <option value="Etc/GMT+12 (GMT-12)" data-iana="Etc/GMT+12"></option>
+            <option value="Etc/GMT+2 (GMT-2)" data-iana="Etc/GMT+2"></option>
+            <option value="Etc/GMT+3 (GMT-3)" data-iana="Etc/GMT+3"></option>
+            <option value="Etc/GMT+4 (GMT-4)" data-iana="Etc/GMT+4"></option>
+            <option value="Etc/GMT+5 (GMT-5)" data-iana="Etc/GMT+5"></option>
+            <option value="Etc/GMT+6 (GMT-6)" data-iana="Etc/GMT+6"></option>
+            <option value="Etc/GMT+7 (GMT-7)" data-iana="Etc/GMT+7"></option>
+            <option value="Etc/GMT+8 (GMT-8)" data-iana="Etc/GMT+8"></option>
+            <option value="Etc/GMT+9 (GMT-9)" data-iana="Etc/GMT+9"></option>
+            <option value="Etc/GMT-1 (GMT+1)" data-iana="Etc/GMT-1"></option>
+            <option value="Etc/GMT-10 (GMT+10)" data-iana="Etc/GMT-10"></option>
+            <option value="Etc/GMT-11 (GMT+11)" data-iana="Etc/GMT-11"></option>
+            <option value="Etc/GMT-12 (GMT+12)" data-iana="Etc/GMT-12"></option>
+            <option value="Etc/GMT-2 (GMT+2)" data-iana="Etc/GMT-2"></option>
+            <option value="Etc/GMT-3 (GMT+3)" data-iana="Etc/GMT-3"></option>
+            <option value="Etc/GMT-4 (GMT+4)" data-iana="Etc/GMT-4"></option>
+            <option value="Etc/GMT-5 (GMT+5)" data-iana="Etc/GMT-5"></option>
+            <option value="Etc/GMT-6 (GMT+6)" data-iana="Etc/GMT-6"></option>
+            <option value="Etc/GMT-7 (GMT+7)" data-iana="Etc/GMT-7"></option>
+            <option value="Etc/GMT-8 (GMT+8)" data-iana="Etc/GMT-8"></option>
+            <option value="Etc/GMT-9 (GMT+9)" data-iana="Etc/GMT-9"></option>
+            <option value="Europe/Amsterdam (GMT+2)" data-iana="Europe/Amsterdam"></option>
+            <option value="Europe/Berlin (GMT+2)" data-iana="Europe/Berlin"></option>
+            <option value="Europe/Dublin (GMT+1)" data-iana="Europe/Dublin"></option>
+            <option value="Europe/Helsinki (GMT+3)" data-iana="Europe/Helsinki"></option>
+            <option value="Europe/London (GMT+1)" data-iana="Europe/London"></option>
+            <option value="Europe/Madrid (GMT+2)" data-iana="Europe/Madrid"></option>
+            <option value="Europe/Moscow (GMT+3)" data-iana="Europe/Moscow"></option>
+            <option value="Europe/Oslo (GMT+2)" data-iana="Europe/Oslo"></option>
+            <option value="Europe/Paris (GMT+2)" data-iana="Europe/Paris"></option>
+            <option value="Europe/Rome (GMT+2)" data-iana="Europe/Rome"></option>
+            <option value="Europe/Stockholm (GMT+2)" data-iana="Europe/Stockholm"></option>
+            <option value="Europe/Warsaw (GMT+2)" data-iana="Europe/Warsaw"></option>
+            <option value="Indian/Maldives (GMT+5)" data-iana="Indian/Maldives"></option>
+            <option value="Pacific/Auckland (GMT+12)" data-iana="Pacific/Auckland"></option>
+            <option value="Pacific/Fiji (GMT+12)" data-iana="Pacific/Fiji"></option>
+            <option value="Pacific/Honolulu (HST)" data-iana="Pacific/Honolulu"></option>
+            <option value="Pacific/Kiritimati (GMT+14)" data-iana="Pacific/Kiritimati"></option>
+        </datalist><label for="extension-timezone-converter-overlay-target-tz-input"
+            style="font-size: 0.9em; color: rgb(85, 85, 85); display: block; margin-bottom: 4px; margin-top: 10px;">To
+            Timezone:</label><input type="text" id="extension-timezone-converter-overlay-target-tz-input"
+            list="extension-timezone-converter-overlay-target-tz-datalist"
+            placeholder="Type to search timezone..."><datalist
+            id="extension-timezone-converter-overlay-target-tz-datalist">
+            <option value="UTC (UTC)" data-iana="UTC"></option>
+            <option value="Africa/Cairo (GMT+3)" data-iana="Africa/Cairo"></option>
+            <option value="Africa/Johannesburg (GMT+2)" data-iana="Africa/Johannesburg"></option>
+            <option value="Africa/Lagos (GMT+1)" data-iana="Africa/Lagos"></option>
+            <option value="Africa/Nairobi (GMT+3)" data-iana="Africa/Nairobi"></option>
+            <option value="America/Adak (HADT)" data-iana="America/Adak"></option>
+            <option value="America/Anchorage (AKDT)" data-iana="America/Anchorage"></option>
+            <option value="America/Argentina/Buenos_Aires (GMT-3)" data-iana="America/Argentina/Buenos_Aires"></option>
+            <option value="America/Bogota (GMT-5)" data-iana="America/Bogota"></option>
+            <option value="America/Boise (MDT)" data-iana="America/Boise"></option>
+            <option value="America/Chicago (CDT)" data-iana="America/Chicago"></option>
+            <option value="America/Denver (MDT)" data-iana="America/Denver"></option>
+            <option value="America/Detroit (EDT)" data-iana="America/Detroit"></option>
+            <option value="America/Halifax (ADT)" data-iana="America/Halifax"></option>
+            <option value="America/Honolulu" data-iana="America/Honolulu"></option>
+            <option value="America/Indiana/Indianapolis (EDT)" data-iana="America/Indiana/Indianapolis"></option>
+            <option value="America/Juneau (AKDT)" data-iana="America/Juneau"></option>
+            <option value="America/Kentucky/Louisville (EDT)" data-iana="America/Kentucky/Louisville"></option>
+            <option value="America/Lima (GMT-5)" data-iana="America/Lima"></option>
+            <option value="America/Los_Angeles (PDT)" data-iana="America/Los_Angeles"></option>
+            <option value="America/Metlakatla (AKDT)" data-iana="America/Metlakatla"></option>
+            <option value="America/Mexico_City (CST)" data-iana="America/Mexico_City"></option>
+            <option value="America/New_York (EDT)" data-iana="America/New_York"></option>
+            <option value="America/Nome (AKDT)" data-iana="America/Nome"></option>
+            <option value="America/North_Dakota/Center (CDT)" data-iana="America/North_Dakota/Center"></option>
+            <option value="America/Phoenix (MST)" data-iana="America/Phoenix"></option>
+            <option value="America/Puerto_Rico (AST)" data-iana="America/Puerto_Rico"></option>
+            <option value="America/Santiago (GMT-4)" data-iana="America/Santiago"></option>
+            <option value="America/Sao_Paulo (GMT-3)" data-iana="America/Sao_Paulo"></option>
+            <option value="America/Sitka (AKDT)" data-iana="America/Sitka"></option>
+            <option value="America/St_Johns (GMT-2:30)" data-iana="America/St_Johns"></option>
+            <option value="America/Vancouver (PDT)" data-iana="America/Vancouver"></option>
+            <option value="America/Yakutat (AKDT)" data-iana="America/Yakutat"></option>
+            <option value="Asia/Bangkok (GMT+7)" data-iana="Asia/Bangkok"></option>
+            <option value="Asia/Dubai (GMT+4)" data-iana="Asia/Dubai"></option>
+            <option value="Asia/Ho_Chi_Minh (GMT+7)" data-iana="Asia/Ho_Chi_Minh"></option>
+            <option value="Asia/Hong_Kong (GMT+8)" data-iana="Asia/Hong_Kong"></option>
+            <option value="Asia/Jakarta (GMT+7)" data-iana="Asia/Jakarta"></option>
+            <option value="Asia/Jerusalem (GMT+3)" data-iana="Asia/Jerusalem"></option>
+            <option value="Asia/Kolkata (GMT+5:30)" data-iana="Asia/Kolkata"></option>
+            <option value="Asia/Riyadh (GMT+3)" data-iana="Asia/Riyadh"></option>
+            <option value="Asia/Seoul (GMT+9)" data-iana="Asia/Seoul"></option>
+            <option value="Asia/Shanghai (GMT+8)" data-iana="Asia/Shanghai"></option>
+            <option value="Asia/Singapore (GMT+8)" data-iana="Asia/Singapore"></option>
+            <option value="Asia/Tokyo (GMT+9)" data-iana="Asia/Tokyo"></option>
+            <option value="Australia/Brisbane (GMT+10)" data-iana="Australia/Brisbane"></option>
+            <option value="Australia/Darwin (GMT+9:30)" data-iana="Australia/Darwin"></option>
+            <option value="Australia/Melbourne (GMT+10)" data-iana="Australia/Melbourne"></option>
+            <option value="Australia/Perth (GMT+8)" data-iana="Australia/Perth"></option>
+            <option value="Australia/Sydney (GMT+10)" data-iana="Australia/Sydney"></option>
+            <option value="Etc/GMT+1 (GMT-1)" data-iana="Etc/GMT+1"></option>
+            <option value="Etc/GMT+10 (GMT-10)" data-iana="Etc/GMT+10"></option>
+            <option value="Etc/GMT+11 (GMT-11)" data-iana="Etc/GMT+11"></option>
+            <option value="Etc/GMT+12 (GMT-12)" data-iana="Etc/GMT+12"></option>
+            <option value="Etc/GMT+2 (GMT-2)" data-iana="Etc/GMT+2"></option>
+            <option value="Etc/GMT+3 (GMT-3)" data-iana="Etc/GMT+3"></option>
+            <option value="Etc/GMT+4 (GMT-4)" data-iana="Etc/GMT+4"></option>
+            <option value="Etc/GMT+5 (GMT-5)" data-iana="Etc/GMT+5"></option>
+            <option value="Etc/GMT+6 (GMT-6)" data-iana="Etc/GMT+6"></option>
+            <option value="Etc/GMT+7 (GMT-7)" data-iana="Etc/GMT+7"></option>
+            <option value="Etc/GMT+8 (GMT-8)" data-iana="Etc/GMT+8"></option>
+            <option value="Etc/GMT+9 (GMT-9)" data-iana="Etc/GMT+9"></option>
+            <option value="Etc/GMT-1 (GMT+1)" data-iana="Etc/GMT-1"></option>
+            <option value="Etc/GMT-10 (GMT+10)" data-iana="Etc/GMT-10"></option>
+            <option value="Etc/GMT-11 (GMT+11)" data-iana="Etc/GMT-11"></option>
+            <option value="Etc/GMT-12 (GMT+12)" data-iana="Etc/GMT-12"></option>
+            <option value="Etc/GMT-2 (GMT+2)" data-iana="Etc/GMT-2"></option>
+            <option value="Etc/GMT-3 (GMT+3)" data-iana="Etc/GMT-3"></option>
+            <option value="Etc/GMT-4 (GMT+4)" data-iana="Etc/GMT-4"></option>
+            <option value="Etc/GMT-5 (GMT+5)" data-iana="Etc/GMT-5"></option>
+            <option value="Etc/GMT-6 (GMT+6)" data-iana="Etc/GMT-6"></option>
+            <option value="Etc/GMT-7 (GMT+7)" data-iana="Etc/GMT-7"></option>
+            <option value="Etc/GMT-8 (GMT+8)" data-iana="Etc/GMT-8"></option>
+            <option value="Etc/GMT-9 (GMT+9)" data-iana="Etc/GMT-9"></option>
+            <option value="Europe/Amsterdam (GMT+2)" data-iana="Europe/Amsterdam"></option>
+            <option value="Europe/Berlin (GMT+2)" data-iana="Europe/Berlin"></option>
+            <option value="Europe/Dublin (GMT+1)" data-iana="Europe/Dublin"></option>
+            <option value="Europe/Helsinki (GMT+3)" data-iana="Europe/Helsinki"></option>
+            <option value="Europe/London (GMT+1)" data-iana="Europe/London"></option>
+            <option value="Europe/Madrid (GMT+2)" data-iana="Europe/Madrid"></option>
+            <option value="Europe/Moscow (GMT+3)" data-iana="Europe/Moscow"></option>
+            <option value="Europe/Oslo (GMT+2)" data-iana="Europe/Oslo"></option>
+            <option value="Europe/Paris (GMT+2)" data-iana="Europe/Paris"></option>
+            <option value="Europe/Rome (GMT+2)" data-iana="Europe/Rome"></option>
+            <option value="Europe/Stockholm (GMT+2)" data-iana="Europe/Stockholm"></option>
+            <option value="Europe/Warsaw (GMT+2)" data-iana="Europe/Warsaw"></option>
+            <option value="Indian/Maldives (GMT+5)" data-iana="Indian/Maldives"></option>
+            <option value="Pacific/Auckland (GMT+12)" data-iana="Pacific/Auckland"></option>
+            <option value="Pacific/Fiji (GMT+12)" data-iana="Pacific/Fiji"></option>
+            <option value="Pacific/Honolulu (HST)" data-iana="Pacific/Honolulu"></option>
+            <option value="Pacific/Kiritimati (GMT+14)" data-iana="Pacific/Kiritimati"></option>
+        </datalist></div><button id="extension-timezone-converter-overlay-convert-btn">Convert Time</button>
+    <div id="extension-timezone-converter-overlay-results"
+        style="background-color: rgb(248, 248, 248); border: 1px solid rgb(238, 238, 238); padding: 15px; border-radius: 8px; min-height: 80px; max-height: 250px; overflow-y: auto; text-align: left; overflow-wrap: break-word; font-size: 0.95em; line-height: 1.6; color: rgb(85, 85, 85); flex-grow: 1;">
+        <span style="color: #6c757d;">Enter time and click Convert.</span></div>
+</div>

@@ -2,19 +2,12 @@
     "manifest_version": 3,
     "name": "TZChrome",
     "version": "1.0",
-    "description": "A Chrome extension that converts a selected time to a target timezone",
+    "description": "A Chrome extension that converts a selected time to a target timezone.",
     "icons": {
         "16": "images/TZ-icon-16.png",
         "48": "images/TZ-icon-48.png",
         "128": "images/TZ-icon-128.png"
     },
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"],
-            "run_at": "document_idle"
-        }
-    ],
     "action": {
         "default_icon": {
             "16": "images/TZ-icon-16.png",
@@ -26,7 +19,8 @@
         "service_worker": "background.js"
     },
     "permissions": [
-        "activeTab"
+        "activeTab", 
+        "scripting"
     ]
 }
 

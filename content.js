@@ -304,6 +304,8 @@ function createTimezoneConverterOverlay() {
 
     const sourceTz = getIanaTimezoneFromDisplay(sourceDisplayTz);
     const targetTz = getIanaTimezoneFromDisplay(targetDisplayTz);
+    console.log("sourceTz:", sourceTz);
+    console.log("targetTz:", targetTz);
 
     if (!inputTime) {
       resultsDiv.innerHTML =
@@ -327,11 +329,11 @@ function createTimezoneConverterOverlay() {
     resultsDiv.innerHTML =
       '<span style="color: #4a86c7;">Converting...<br></span>';
 
+    // TIMEZONE CONVERTER LOGIC
     try {
-      // New, more flexible regex to handle HH:MM, HH:MM:SS, and optional AM/PM
       const timeRegex = /(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?/i;
       const match = inputTime.match(timeRegex);
-      console.log("Input time regex match:", match);
+      // console.log("Input time regex match:", match);
 
       if (!match) {
         resultsDiv.innerHTML =
@@ -341,16 +343,14 @@ function createTimezoneConverterOverlay() {
 
       let hours = parseInt(match[1]);
       const minutes = parseInt(match[2]);
-      const seconds = match[3] ? parseInt(match[3]) : 0; // Default to 0 if seconds are not specified
+      const seconds = match[3] ? parseInt(match[3]) : 0;
       const ampm = match[4] ? match[4].toUpperCase() : "";
 
-      // 1. Account for AM/PM when specified
       if (ampm === "PM" && hours < 12) {
         hours += 12;
       } else if (ampm === "AM" && hours === 12) {
-        hours = 0; // 12 AM is 00:xx in 24-hour time
+        hours = 0;
       } else if (!ampm && hours > 23) {
-        // Handle invalid 24-hour time values
         resultsDiv.innerHTML =
           '<span style="color: #dc3545; font-weight: bold;">Invalid 24-hour time value. Hours must be 0-23.</span>';
         return;
@@ -369,17 +369,32 @@ function createTimezoneConverterOverlay() {
         return;
       }
 
-      // Create a date object with the parsed time.
-      // The date itself (month, day, year) doesn't matter for timezone conversion
-      // of a specific time, as long as it's a valid date.
-      const today = new Date();
-      today.setHours(hours, minutes, seconds, 0);
+      // Implementation: convert the user's input time (hours, minutes) to a universal time (UTC) first, and then create a new Date object from that UTC timestamp.
 
-      // 2. Convert with seconds in the output
+      // ceate a date string representing the user's input in the source timezone
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+
+      // Use toISOString() to get a standardized string without timezone offset.
+      const sourceDateTimeString = `${year}-${month}-${day}T${String(
+        hours
+      ).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(
+        seconds
+      ).padStart(2, "0")}`;
+
+      // create a formatter to get the UTC timestamp of that date string in the source timezone (don't need to format it, just to get the timestamp)
+      const sourceDateInTz = new Date(
+        new Date(sourceDateTimeString).toLocaleString("en-US", {
+          timeZone: sourceTz,
+        })
+      );
+
       const outputOptions = {
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit", // Added 'second' to the output options
+        second: "2-digit",
         hour12: true,
         timeZoneName: "short",
       };
@@ -389,8 +404,8 @@ function createTimezoneConverterOverlay() {
         timeZone: targetTz,
       });
 
-      // Use formatToParts to get the time parts including the time zone abbreviation
-      const targetParts = targetFormatter.formatToParts(today);
+      // Get the target time and date parts from the sourceDateInTz
+      const targetParts = targetFormatter.formatToParts(sourceDateInTz); // CONVERSION OCCURS
       const targetTime = targetParts
         .filter((p) => p.type !== "timeZoneName")
         .map((p) => p.value)
@@ -398,9 +413,60 @@ function createTimezoneConverterOverlay() {
       const targetAbbreviation =
         targetParts.find((p) => p.type === "timeZoneName")?.value || "";
 
-      let output = `<span style="display: block; padding-top: 2px; padding-bottom: 2px; font-size: 1.5em;"> ${targetTime}
-      <span style="color:#669dd8;">${targetAbbreviation}</span>
-    </span>`;
+      // Debugging output
+      console.log("sourceDateInTz:", sourceDateInTz);
+      console.log("targetParts:", targetParts);
+      console.log("targetTime:", targetTime);
+      console.log("targetAbbreviation:", targetAbbreviation);
+
+      // Get the day of the week, month, and day of the month for both to compare
+      const sourceDateParts = new Intl.DateTimeFormat("en-US", {
+        timeZone: sourceTz,
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }).formatToParts(sourceDateInTz);
+      const targetDateParts = new Intl.DateTimeFormat("en-US", {
+        timeZone: targetTz,
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }).formatToParts(sourceDateInTz);
+
+      const sourceDay = parseInt(
+        sourceDateParts.find((p) => p.type === "day").value
+      );
+      const targetDay = parseInt(
+        targetDateParts.find((p) => p.type === "day").value
+      );
+
+      let dayChangeText = "";
+
+      const dateDifference = targetDay - sourceDay;
+      if (dateDifference === 1) {
+        dayChangeText =
+          '<span style="color: #28a745; font-weight: bold;">(Next Day)</span>';
+      } else if (dateDifference === -1) {
+        dayChangeText =
+          '<span style="color: #dc3545; font-weight: bold;">(Previous Day)</span>';
+      } else if (dateDifference > 1) {
+        dayChangeText = `<span style="color: #28a745; font-weight: bold;">(+${dateDifference} days)</span>`;
+      } else if (dateDifference < -1) {
+        dayChangeText = `<span style="color: #dc3545; font-weight: bold;">(${dateDifference} days)</span>`;
+      }
+
+      let output = `
+      <span style="display: block; font-size: 1.5em; font-weight: 600; padding-top: 5px;">
+        ${targetTime}
+        <span style="color:#669dd8; font-size: 0.8em; font-weight: 400;">${targetAbbreviation}</span>
+          <span style="font-size: 1em; color: #888;">
+        ${dayChangeText}
+      </span>
+      </span>
+      `;
+
+      console.log("dayChangeText:", dayChangeText);
+      console.log("output:", output);
 
       resultsDiv.innerHTML = output;
     } catch (error) {

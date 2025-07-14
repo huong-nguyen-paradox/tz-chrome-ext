@@ -8,6 +8,13 @@
         "48": "images/TZ-icon-48.png",
         "128": "images/TZ-icon-128.png"
     },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"],
+            "run_at": "document_idle"
+        }
+    ],
     "action": {
         "default_icon": {
             "16": "images/TZ-icon-16.png",
@@ -19,11 +26,7 @@
         "service_worker": "background.js"
     },
     "permissions": [
-        "activeTab",
-        "scripting"
-    ], 
-    "host_permissions": [
-    "<all_urls>"
-  ]
+        "activeTab"
+    ]
 }
 
